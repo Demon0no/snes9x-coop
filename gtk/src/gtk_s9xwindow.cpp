@@ -12,6 +12,8 @@
 #include <X11/extensions/Xvlib.h>
 #endif
 
+#include "lua-engine.h"
+
 #include "gtk_s9x.h"
 #include "gtk_preferences.h"
 #include "gtk_icon.h"
@@ -72,6 +74,16 @@ static gboolean
 event_open_multicart (GtkWidget *widget, gpointer data)
 {
     ((Snes9xWindow *) data)->open_multicart_dialog ();
+
+    return TRUE;
+}
+
+static gboolean
+event_run_lua (GtkWidget *widget, gpointer data)
+{
+    Snes9xWindow *window = (Snes9xWindow *) data;
+
+    window->run_lua ();
 
     return TRUE;
 }
@@ -573,6 +585,7 @@ Snes9xWindow::Snes9xWindow (Snes9xConfig *config) :
         { "focus_in_event", G_CALLBACK (event_focus_in) },
         { "focus_out_event", G_CALLBACK (event_focus_out) },
         { "open_netplay", G_CALLBACK (event_open_netplay) },
+        { "run_lua", G_CALLBACK (event_run_lua) },
         { "rom_info", G_CALLBACK (event_rom_info) },
         { "sync_clients", G_CALLBACK (event_sync_clients) },
         { "toggle_interface", G_CALLBACK (event_toggle_interface) },
@@ -1342,6 +1355,13 @@ Snes9xWindow::update_statusbar (void)
 }
 
 void
+Snes9xWindow::run_lua (void)
+{
+    RunLuaScriptFile(0, "./coop/coop.lua");
+    return;
+}
+
+void
 Snes9xWindow::show_rom_info (void)
 {
     GtkWidget *msg;
@@ -1419,6 +1439,7 @@ Snes9xWindow::configure_widgets (void)
     enable_widget ("open_movie_item", config->rom_loaded);
     enable_widget ("jump_to_frame_item", config->rom_loaded);
     enable_widget ("cheats_item", config->rom_loaded);
+    enable_widget ("run_lua_item", config->rom_loaded);
     enable_widget ("rom_info_item", config->rom_loaded);
 
 #ifdef NETPLAY_SUPPORT

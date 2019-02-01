@@ -1351,6 +1351,15 @@
                       </object>
                     </child>
                     <child>
+                      <object class="GtkMenuItem" id="run_lua_item">
+                        <property name="label" translatable="yes">Run Coop script...</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="run_lua" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkImageMenuItem" id="rom_info_item">
                         <property name="label" translatable="yes">Show ROM _Info...</property>
                         <property name="visible">True</property>
